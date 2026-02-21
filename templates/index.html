@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Advanced Secure Password Generator</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>🔐 Secure Password Generator</h1>
+
+    <input type="number" id="length" placeholder="Enter Password Length" min="4">
+
+    <div class="options">
+        <label><input type="checkbox" id="upper"> Uppercase</label>
+        <label><input type="checkbox" id="lower"> Lowercase</label>
+        <label><input type="checkbox" id="digits"> Numbers</label>
+        <label><input type="checkbox" id="symbols"> Symbols</label>
+    </div>
+
+    <input type="text" id="exclude" placeholder="Exclude characters (e.g. 0O1l)">
+
+    <button onclick="generatePassword()">Generate Password</button>
+
+    <div class="result">
+        <p id="password"></p>
+        <p id="entropy"></p>
+        <p id="strength"></p>
+        <p id="combinations"></p>
+        <p id="crack_time"></p>
+    </div>
+
+    <footer>
+        Developed by Mahammad
+    </footer>
+</div>
+
+<script src="/static/script.js"></script>
+</body>
+</html>
