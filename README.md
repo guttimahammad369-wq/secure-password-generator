@@ -66,6 +66,7 @@ The system guarantees at least one character from each selected category. This p
 ---
 ## 📊 Strength Levels | Entropy (bits) | Strength | ##
 |---------------|----------| 
+
 | < 28 | Very Weak | 
 | 28–35 | Weak | 
 | 36–59 | Moderate | 
@@ -73,17 +74,15 @@ The system guarantees at least one character from each selected category. This p
 | 128+ | Very Strong | 
 ---
 ## 🛠 Technologies Used ##
-🛠️ Tech Stack
+
 🔹 Backend
 
 Python 3
-
 Flask
 
 🔹 Frontend
 
 HTML5
-
 CSS3
 
 JavaScript
