@@ -3,7 +3,7 @@ async function generatePassword() {
     const length = document.getElementById("length").value;
 
     if (!length || length < 4) {
-        alert("Please enter valid password length (min 4)");
+        alert("Enter valid password length (min 4)");
         return;
     }
 
@@ -29,18 +29,42 @@ async function generatePassword() {
         return;
     }
 
-    document.getElementById("password").innerText =
-        "Password: " + result.password;
+    document.getElementById("password").innerText = "Password: " + result.password;
+    document.getElementById("entropy").innerText = "Entropy: " + result.entropy + " bits";
+    document.getElementById("strength").innerText = "Strength: " + result.strength;
+    document.getElementById("combinations").innerText = "Total Combinations: " + result.combinations;
+    document.getElementById("crack_time").innerText = "Basic Crack Time: " + result.crack_time;
+}
 
-    document.getElementById("entropy").innerText =
-        "Entropy: " + result.entropy + " bits";
+function copyPassword() {
+    const text = document.getElementById("password").innerText.replace("Password: ", "");
+    if (!text) {
+        alert("Generate password first!");
+        return;
+    }
+    navigator.clipboard.writeText(text);
+    alert("Copied!");
+}
 
-    document.getElementById("strength").innerText =
-        "Strength: " + result.strength;
+async function checkPassword() {
 
-    document.getElementById("combinations").innerText =
-        "Total Combinations: " + result.combinations;
+    const password = document.getElementById("checkPassword").value;
 
-    document.getElementById("crack_time").innerText =
-        "Estimated Crack Time: " + result.crack_time;
+    if (!password) {
+        alert("Enter password");
+        return;
+    }
+
+    const response = await fetch("/check", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password: password })
+    });
+
+    const result = await response.json();
+
+    document.getElementById("checkResult").innerText =
+        "Entropy: " + result.entropy +
+        " | Strength: " + result.strength +
+        " | Crack Time: " + result.crack_time;
 }

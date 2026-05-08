@@ -4,11 +4,18 @@ import secrets
 import string
 import math
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="templates", static_folder="static")
+app.config["TEMPLATES_AUTO_RELOAD"] = True
+app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 0
+# Disable caching completely
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
+
 CORS(app)
 
-ATTACK_SPEED = 1_000_000_000  # 1 billion guesses per second
+ATTACK_SPEED = 1_000_000_000
 
+
+# ---------------- PASSWORD LOGIC ---------------- #
 
 def generate_password(length, use_upper, use_lower, use_digits, use_symbols, exclude_chars=""):
     characters = ""
@@ -45,11 +52,12 @@ def generate_password(length, use_upper, use_lower, use_digits, use_symbols, exc
         password.append(secrets.choice(characters))
 
     secrets.SystemRandom().shuffle(password)
-
     return ''.join(password), len(characters)
 
 
 def calculate_entropy(length, charset_size):
+    if charset_size == 0:
+        return 0
     return length * math.log2(charset_size)
 
 
@@ -84,9 +92,21 @@ def convert_time(seconds):
         return f"{seconds:.2f} seconds"
 
 
+# ---------------- ROUTES ---------------- #
+
 @app.route("/")
 def home():
     return render_template("index.html")
+
+
+@app.route("/checker")
+def checker():
+    return render_template("checker.html")
+
+
+@app.route("/about")
+def about():
+    return render_template("about.html")
 
 
 @app.route("/generate", methods=["POST"])
@@ -115,7 +135,6 @@ def generate():
 
     return jsonify({
         "password": password,
-        "charset_size": charset_size,
         "entropy": round(entropy, 2),
         "strength": strength,
         "combinations": f"{combinations:,}",
@@ -123,5 +142,26 @@ def generate():
     })
 
 
+@app.route("/check", methods=["POST"])
+def check_password():
+    data = request.json
+    password = data["password"]
+
+    length = len(password)
+    charset = len(set(password))
+
+    entropy = calculate_entropy(length, charset)
+    strength = entropy_strength(entropy)
+
+    combinations = charset ** length
+    seconds = combinations / ATTACK_SPEED
+
+    return jsonify({
+        "entropy": round(entropy, 2),
+        "strength": strength,
+        "crack_time": convert_time(seconds)
+    })
+
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, use_reloader=True)

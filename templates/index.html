@@ -1,40 +1,28 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Advanced Secure Password Generator</title>
-    <link rel="stylesheet" href="/static/style.css">
-</head>
-<body>
+{% extends "base.html" %}
+{% block content %}
 
-<div class="container">
-    <h1>🔐 Secure Password Generator</h1>
+<h1>🔐 Password Generator</h1>
 
-    <input type="number" id="length" placeholder="Enter Password Length" min="4">
+<input type="number" id="length" placeholder="Password Length">
 
-    <div class="options">
-        <label><input type="checkbox" id="upper"> Uppercase</label>
-        <label><input type="checkbox" id="lower"> Lowercase</label>
-        <label><input type="checkbox" id="digits"> Numbers</label>
-        <label><input type="checkbox" id="symbols"> Symbols</label>
-    </div>
-
-    <input type="text" id="exclude" placeholder="Exclude characters (e.g. 0O1l)">
-
-    <button onclick="generatePassword()">Generate Password</button>
-
-    <div class="result">
-        <p id="password"></p>
-        <p id="entropy"></p>
-        <p id="strength"></p>
-        <p id="combinations"></p>
-        <p id="crack_time"></p>
-    </div>
-
-    <footer>
-        Developed by Mahammad
-    </footer>
+<div class="options">
+    <label><input type="checkbox" id="upper"> Uppercase</label>
+    <label><input type="checkbox" id="lower"> Lowercase</label>
+    <label><input type="checkbox" id="digits"> Numbers</label>
+    <label><input type="checkbox" id="symbols"> Symbols</label>
 </div>
 
-<script src="/static/script.js"></script>
-</body>
-</html>
+<input type="text" id="exclude" placeholder="Exclude characters">
+
+<button onclick="generatePassword()">Generate</button>
+<button onclick="copyPassword()">Copy</button>
+
+<div class="result">
+    <p id="password"></p>
+    <p id="entropy"></p>
+    <p id="strength"></p>
+    <p id="combinations"></p>
+    <p id="crack_time"></p>
+</div>
+
+{% endblock %}
